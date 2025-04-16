@@ -25,6 +25,8 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 28
 
+    namespace 'dev.andrea689.social_share_plugin'
+
     defaultConfig {
         minSdkVersion 16
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
