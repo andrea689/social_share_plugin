@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await SocialSharePlugin.platformVersion;
+      platformVersion = await SocialSharePlugin.platformVersion ?? 'Unknown';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
@@ -54,96 +54,84 @@ class _MyAppState extends State<MyApp> {
             Center(
               child: Text('Running on: $_platformVersion\n'),
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Share to Instagram'),
               onPressed: () async {
-                File file =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
-                await SocialSharePlugin.shareToFeedInstagram(path: file.path);
+                final file =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                await SocialSharePlugin.shareToFeedInstagram(path: file!.path);
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Share to Facebook Photo'),
               onPressed: () async {
-                File file =
-                    await ImagePicker.pickImage(source: ImageSource.gallery);
+                final file =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
                 await SocialSharePlugin.shareToFeedFacebookPhoto(
-                    path: file.path,
+                    path: file!.path,
                     hashtag: '#test',
-                    onSuccess: (_) {
+                    onSuccess: (_) async {
                       print('FACEBOOK SUCCESS');
-                      return;
                     },
-                    onCancel: () {
+                    onCancel: () async {
                       print('FACEBOOK CANCELLED');
-                      return;
                     },
-                    onError: (error) {
+                    onError: (error) async {
                       print('FACEBOOK ERROR $error');
-                      return;
                     });
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Share to Facebook Network Photo'),
               onPressed: () async {
                 await SocialSharePlugin.shareToFeedFacebookPhoto(
                     url: 'https://picsum.photos/600/400',
                     hashtag: '#test',
-                    onSuccess: (_) {
+                    onSuccess: (_) async {
                       print('FACEBOOK SUCCESS');
-                      return;
                     },
-                    onCancel: () {
+                    onCancel: () async {
                       print('FACEBOOK CANCELLED');
-                      return;
                     },
-                    onError: (error) {
+                    onError: (error) async {
                       print('FACEBOOK ERROR $error');
-                      return;
                     });
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Share to Facebook Video'),
               onPressed: () async {
                 if (Platform.isAndroid) {
-                  File file =
-                      await ImagePicker.pickVideo(source: ImageSource.gallery);
+                  final file = await ImagePicker()
+                      .pickVideo(source: ImageSource.gallery);
                   await SocialSharePlugin.shareToFeedFacebookVideo(
-                      path: file.path,
+                      path: file!.path,
                       hashtag: '#test',
-                      onSuccess: (_) {
+                      onSuccess: (_) async {
                         print('FACEBOOK SUCCESS');
-                        return;
                       },
-                      onCancel: () {
+                      onCancel: () async {
                         print('FACEBOOK CANCELLED');
-                        return;
                       },
-                      onError: (error) {
+                      onError: (error) async {
                         print('FACEBOOK ERROR $error');
-                        return;
                       });
                 } else if (Platform.isIOS) {
                   await SocialSharePlugin.shareToFeedFacebookVideo(
                       hashtag: '#test',
-                      onSuccess: (_) {
+                      onSuccess: (_) async {
                         print('FACEBOOK SUCCESS');
-                        return;
                       },
-                      onCancel: () {
+                      onCancel: () async {
                         print('FACEBOOK CANCELLED');
-                        return;
                       },
-                      onError: (error) {
+                      onError: (error) async {
                         print('FACEBOOK ERROR $error');
-                        return;
                       });
                 }
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Share to Facebook Link'),
               onPressed: () async {
                 String url = 'https://flutter.dev/';
@@ -153,24 +141,21 @@ class _MyAppState extends State<MyApp> {
                   quote: quote,
                   url: url,
                   hashtag: '#test',
-                  onSuccess: (_) {
+                  onSuccess: (_) async {
                     print('FACEBOOK SUCCESS');
-                    return;
                   },
-                  onCancel: () {
+                  onCancel: () async {
                     print('FACEBOOK CANCELLED');
-                    return;
                   },
-                  onError: (error) {
+                  onError: (error) async {
                     print('FACEBOOK ERROR $error');
-                    return;
                   },
                 );
 
                 print(result);
               },
             ),
-            RaisedButton(
+            ElevatedButton(
               child: Text('Share to Twitter'),
               onPressed: () async {
                 String url = 'https://flutter.dev/';
@@ -179,13 +164,11 @@ class _MyAppState extends State<MyApp> {
                 final result = await SocialSharePlugin.shareToTwitterLink(
                     text: text,
                     url: url,
-                    onSuccess: (_) {
+                    onSuccess: (_) async {
                       print('TWITTER SUCCESS');
-                      return;
                     },
-                    onCancel: () {
+                    onCancel: () async {
                       print('TWITTER CANCELLED');
-                      return;
                     });
                 print(result);
               },
